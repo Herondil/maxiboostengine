@@ -1,0 +1,21 @@
+{
+  "name": "enginemaxiboost",
+  "version": "0.0.0",
+  "description": "moteur de jeu dans navigateur web",
+  "main": "index.js",
+  "scripts": {
+    "test": "run dev"
+  },
+  "keywords": [
+    "javascript",
+    "videogame",
+    "jeuvidéo",
+    "game",
+    "jeu"
+  ],
+  "author": "maxens.dubois@gmail.com",
+  "license": "ISC",
+  "dependencies": {
+    "live-server": "^1.2.1"
+  }
+}
