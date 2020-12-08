@@ -11,14 +11,13 @@ let lastClick = {
 function StartGame(){
 	canvas_generator();
 	loadImgs();
-	afficher_background();
 }
 
 function loadImgs(){
 	
 }
 
-function canvas_generator() {
+function canvas_generator(){
 	
 	//créer l'élément
 	let c = document.createElement("canvas");
@@ -34,7 +33,7 @@ function canvas_generator() {
 			
 		lastClick.x = xClick;
 		lastClick.y = yClick;
-		console.log(xClick, yClick);
+		//console.log(xClick, yClick);
 	});
 	
 	//configurer le canvas
@@ -48,13 +47,29 @@ function canvas_generator() {
 	return "ok";
 }
 
-function afficher_background() {
+function afficher_background(imageLocation){
 	//créér l'image, un élément image
 	let img = new Image();
-	img.src = 'katamari.jpg';
+	img.src = imageLocation;
 
 	img.onload  = () => {
 		//afficher cette image dans le canvas
 		ctx.drawImage(img,0,0,800,600);
 	};
+}
+
+function renderSprite(imageLocation, position){
+	//créér l'image, un élément image
+	let img = new Image();
+	img.src = imageLocation;
+
+	img.onload  = () => {
+		//afficher cette image dans le canvas
+		ctx.drawImage(img,0,0,96,64,position.x,position.y,96,64);
+	};
+}
+
+function renderBackgroundColor(color){
+	ctx.fillStyle = color;
+	ctx.fillRect(0, 0, 800, 600);
 }
