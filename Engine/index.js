@@ -64,7 +64,7 @@ function canvas_generator(){
 		//console.log(xClick, yClick);
 	});
 	
-	document.body.addEventListener('keydown', (event) => {
+	c.addEventListener('keydown', (event) => {
 		inputsPressed.push(event.code)
 	});
 	
@@ -72,6 +72,7 @@ function canvas_generator(){
 	//changer hauteur/largeur
 	c.setAttribute("width",800);
 	c.setAttribute("height",600);
+	c.setAttribute("tabindex",0);
 	
 	//ajouter l'élément à la page
 	//c va être un enfant de "Game"
@@ -119,7 +120,6 @@ function gameLoop(){
 	renderAnimation(ActorToRender);
 	
 	//Si mon tableau contient "flèche de droite", alors on bouge de +1 en x
-	console.log(inputsPressed);
 	if(inputsPressed.indexOf("ArrowRight") != -1)
 		ActorToRender.position.x += 10;
 	
