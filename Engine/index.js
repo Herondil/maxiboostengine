@@ -2,31 +2,41 @@ let ctx,
 	width,
 	height;
 	
-//le sprite animé
-let img,
-	currentSx = 0;
-	
+//l'objet
+//animation typique
+let animation = {
+	img 		 : undefined, 	// l'élément image
+	frames		 : 0,			// Nombre d'image clées de l'animation
+	currentSx 	 : 0, 			// décalage actuel
+	currentSy 	 : 0,
+	sxIncrement	 : 0,        	// le décalage entre les sx
+	looping		 : true,		// annimation en boucle ?
+	framesPerKey : 0, 			// nombre de frames avant de passer au sx suivant
+	width		 : 0,
+	height		 : 0
+};
+
+let actor = {
+	//animations : []
+	animation : undefined,
+	position : { x : 0, y : 0}
+}
+
+let ActorToRender;
+
 //le dernier
 let lastClick = {
 	x : undefined,
 	y : undefined
-}
+};
 
-let spriteLocation;
 
 let frames = 0;
 
 function StartGame(){
 	canvas_generator();
 	loadImgs();
-	
-	img = new Image();
-	img.src = spriteLocation;
-	
-	img.onload  = () => {
-		//démarer vraiment le jeu
-		window.requestAnimationFrame(gameLoop);
-	};
+	window.requestAnimationFrame(gameLoop);
 }
 
 function loadImgs(){
@@ -74,8 +84,15 @@ function afficher_background(imageLocation){
 	};
 }
 
-function renderSprite(imageLocation, position, sx){
-	ctx.drawImage(img,sx,0,96,64,position.x,position.y,96,64);
+function renderAnimation(actor){
+	ctx.drawImage(	actor.animation.img,
+					actor.animation.currentSx,
+					actor.animation.currentSy,
+					actor.animation.width,
+					actor.animation.height,
+					actor.position.x,
+					actor.position.y,
+	actor.animation.width,actor.animation.height);
 }
 
 function renderBackgroundColor(color){
@@ -89,17 +106,24 @@ function gameLoop(){
 	//dessin des éléments
 	ctx.clearRect(0, 0, 800,600)
 	
-
+	//fond
+	renderBackgroundColor("green");
+	
 	//dessiner le sprite de l'exercice
-	renderSprite(spriteLocation, {x : 50, y : 50}, currentSx);
+	renderAnimation(ActorToRender);
+	
+	//ActorToRender.position.x += 1;
 	
 	//passer à l'image suivante du sprite
 	// opération "modulo"
-	if( (frames % 6) == 0 ){
-		currentSx += 96;//aller à l'image clé suivante
-		if( currentSx == 672) currentSx = 0; //revenir au début de l'animation
+	if( (frames % ActorToRender.animation.framesPerKey) == 0 ){
+		ActorToRender.animation.currentSx += ActorToRender.animation.sxIncrement;//aller à l'image clé suivante
+		if( ActorToRender.animation.currentSx == (ActorToRender.animation.sxIncrement * (ActorToRender.animation.frames - 1) ) ){ 
+			ActorToRender.animation.currentSx = 0; //revenir au début de l'animation
+		}
 	}
 	
+	//est-ce que la frame en cours décale le sx ?
 	
 	
 	frames++;

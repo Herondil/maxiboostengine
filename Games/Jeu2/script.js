@@ -1,28 +1,56 @@
 //import ....
 
-spriteLocation = "img/noBKG_KnightShield_strip.png";
-
-StartGame();
-
+shieldAnimationSpriteLocation 	= "img/noBKG_KnightShield_strip.png";
+runAnimationSpriteLocation		= "img/noBKG_KnightRun_strip.png";
 
 
+//Créer un objet d'animation particulier
+//envoyer cet objet dans le moteur
 
-/*
+let shieldSpriteElem = new Image();
+shieldSpriteElem.src = shieldAnimationSpriteLocation;
 
+let runSpriteElem	= new Image();
+runSpriteElem.src 	= runAnimationSpriteLocation;
 
-renderSprite("img/noBKG_KnightShield_strip.png",{x : 50, y : 50},0);
-renderBackgroundColor("fuchsia");
-ctx.clearRect(0, 0, 800,600);
-renderSprite("img/noBKG_KnightShield_strip.png",{x : 80, y : 50},96*6);
-gameLoop();
-
-function gameLoop(){
-	//efface le précédent sprite, efface tout
-	//ctx.clearRect(0, 0, 800,600)
-	//afficher le sprite sur la bonne image
-	renderSprite("img/noBKG_KnightShield_strip.png",{x : 50, y : 50},0);
-	//console.log("gameLoop");
-	ctx.clearRect(0, 0, 800,600)
-	window.requestAnimationFrame(gameLoop);
+runSpriteElem.onload = () => {
+	//démarer vraiment le jeu
+	let runAnimation = {
+		img 		 : runSpriteElem, 	// l'élément image
+		frames		 : 8,			// Nombre d'image clées de l'animation
+		currentSx 	 : 0, 			// décalage actuel
+		currentSy 	 : 0,
+		sxIncrement	 : 96,        	// le décalage entre les sx
+		looping		 : true,		// annimation en boucle ?
+		framesPerKey : 6, 			// nombre de frames avant de passer au sx suivant
+		width		 : 96,
+		height		 : 64
+	};
+	
+	let knightActor = {
+		animation : runAnimation,
+		position : { x : 0, y : 40}	
+	};
+	
+	ActorToRender = knightActor;
+	
+	StartGame();
 }
+/*
+shieldSpriteElem.onload  = () => {
+	//démarer vraiment le jeu
+	let shieldAnimation = {
+		img 		 : shieldSpriteElem, 	// l'élément image
+		frames		 : 7,			// Nombre d'image clées de l'animation
+		currentSx 	 : 0, 			// décalage actuel
+		currentSy 	 : 0,
+		sxIncrement	 : 96,        	// le décalage entre les sx
+		looping		 : true,		// annimation en boucle ?
+		framesPerKey : 6, 			// nombre de frames avant de passer au sx suivant
+		width		 : 96,
+		height		 : 64
+	};
+	AnimationToPlay = shieldAnimation;
+	StartGame();
+};
 */
