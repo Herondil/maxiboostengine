@@ -30,6 +30,7 @@ let lastClick = {
 	y : undefined
 };
 
+let inputsPressed = [];
 
 let frames = 0;
 
@@ -43,6 +44,7 @@ function loadImgs(){
 	
 }
 
+//sert à créer le canvas et les evts clavier/souris
 function canvas_generator(){
 	
 	//créer l'élément
@@ -60,6 +62,10 @@ function canvas_generator(){
 		lastClick.x = xClick;
 		lastClick.y = yClick;
 		//console.log(xClick, yClick);
+	});
+	
+	document.body.addEventListener('keydown', (event) => {
+		inputsPressed.push(event.code)
 	});
 	
 	//configurer le canvas
@@ -112,7 +118,10 @@ function gameLoop(){
 	//dessiner le sprite de l'exercice
 	renderAnimation(ActorToRender);
 	
-	//ActorToRender.position.x += 1;
+	//Si mon tableau contient "flèche de droite", alors on bouge de +1 en x
+	console.log(inputsPressed);
+	if(inputsPressed.indexOf("ArrowRight") != -1)
+		ActorToRender.position.x += 10;
 	
 	//passer à l'image suivante du sprite
 	// opération "modulo"
@@ -121,12 +130,13 @@ function gameLoop(){
 		if( ActorToRender.animation.currentSx == (ActorToRender.animation.sxIncrement * (ActorToRender.animation.frames - 1) ) ){ 
 			ActorToRender.animation.currentSx = 0; //revenir au début de l'animation
 		}
-	}
-	
-	//est-ce que la frame en cours décale le sx ?
-	
+	}	
 	
 	frames++;
+	
+	//on vide les touches
+	inputsPressed = [];
+	
 	//boucle du jeu
 	window.requestAnimationFrame(gameLoop);
 }
