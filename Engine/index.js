@@ -1,9 +1,10 @@
 let ctx,
 	width,
 	height;
-	
+
+let backgroundColor = "lightgreen";
+
 //l'objet
-//animation typique
 let animation = {
 	img 		 : undefined, 	// l'élément image
 	frames		 : 0,			// Nombre d'image clées de l'animation
@@ -15,14 +16,35 @@ let animation = {
 	width		 : 0,
 	height		 : 0
 };
-
 let actor = {
 	//animations : []
 	animation : undefined,
 	position : { x : 0, y : 0}
 }
-
 let ActorToRender;
+
+//pour la map
+let tileset = {
+	img 		: undefined,
+	width 		: 0,
+	height 		: 0
+}
+let tile = {
+	tileset 	: undefined,
+	nameInMap	: undefined,
+	width		: 0,
+	height		: 0,
+	line 		: 0,
+	column		: 0
+}
+let tilemap = {
+	array	: undefined, //le tableau de tableau
+	tileset : undefined,
+	lines 	: 0,
+	columns : 0,
+	tiles   : []
+}
+let tilemapToRender;
 
 //le dernier
 let lastClick = {
@@ -108,16 +130,51 @@ function renderBackgroundColor(color){
 	ctx.fillRect(0, 0, 800, 600);
 }
 
+function renderTilemap(tilemapToRender){
+	for(let i = 0; i < tilemapToRender.lines; i++){
+		for(let j = 0; j < tilemapToRender.columns; j++){
+			
+			let tileString = tilemapToRender.array[i][j];
+			
+			//parcourir les tuiles pour trouver la bonne
+			for(let k = 0; k < tilemapToRender.tiles.length; k++){
+				let t = tilemapToRender.tiles[k];				
+				if( t.nameInMap == tileString){
+					ctx.drawImage(
+						tilemapToRender.tileset.img,
+						t.width*t.column,
+						t.height*t.line,
+						t.width,
+						t.height,
+						j * t.width,
+						i * t.height,
+						t.width,
+						t.height
+					);
+					break;
+				}
+				if( k == tilemapToRender.tiles.length -1){
+					console.log("le nom "+tileString+" ne correspond à aucune tuile");
+					error.log();
+				}
+			}
+		}
+	}
+}
+
 function gameLoop(){
 	
 	//dessin des éléments
 	ctx.clearRect(0, 0, 800,600)
 	
 	//fond
-	renderBackgroundColor("green");
+	renderBackgroundColor(backgroundColor);
+	
+	//peindre la map
+	renderTilemap(tilemapToRender);
 	
 	//dessiner le sprite de l'exercice
-	renderAnimation(ActorToRender);
+	if(ActorToRender)renderAnimation(ActorToRender);
 	
 	//Si mon tableau contient "flèche de droite", alors on bouge de +1 en x
 	if(inputsPressed.indexOf("ArrowRight") != -1)
@@ -125,12 +182,14 @@ function gameLoop(){
 	
 	//passer à l'image suivante du sprite
 	// opération "modulo"
-	if( (frames % ActorToRender.animation.framesPerKey) == 0 ){
-		ActorToRender.animation.currentSx += ActorToRender.animation.sxIncrement;//aller à l'image clé suivante
-		if( ActorToRender.animation.currentSx == (ActorToRender.animation.sxIncrement * (ActorToRender.animation.frames - 1) ) ){ 
-			ActorToRender.animation.currentSx = 0; //revenir au début de l'animation
+	if(ActorToRender){
+		if( (frames % ActorToRender.animation.framesPerKey) == 0 ){
+			ActorToRender.animation.currentSx += ActorToRender.animation.sxIncrement;//aller à l'image clé suivante
+			if( ActorToRender.animation.currentSx == (ActorToRender.animation.sxIncrement * (ActorToRender.animation.frames - 1) ) ){ 
+				ActorToRender.animation.currentSx = 0; //revenir au début de l'animation
+			}
 		}
-	}	
+	}
 	
 	frames++;
 	
